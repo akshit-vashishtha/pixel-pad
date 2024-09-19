@@ -30,6 +30,14 @@ const drawCircle = (e) => {
 
 }
 
+const drawTriangle = (e) => {
+    ctx.beginPath();
+    ctx.moveTo(prevMouseX, prevMouseY);
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(prevMouseX*2 - e.offsetX, e.offsetY);
+    ctx.closePath();
+    fillColor.checked? ctx.fill() : ctx.stroke();
+}
 
 const startDraw=(e)=>{
     isDrawing=true;
@@ -52,6 +60,8 @@ const drawing = (e) => {
         drawRectangle(e);
     } else if(selectedTool==="circle"){
         drawCircle(e);
+    } else if(selectedTool==="triangle"){
+        drawTriangle(e);
     }
     
 }
