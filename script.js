@@ -22,6 +22,15 @@ const drawRectangle = (e) => {
     else ctx.strokeRect(e.offsetX, e.offsetY, prevMouseX - e.offsetX, prevMouseY - e.offsetY);
 }
 
+const drawCircle = (e) => {
+    ctx.beginPath();
+    let radius= Math.sqrt(Math.pow((prevMouseX - e.offsetX), 2) + Math.pow((prevMouseY - e.offsetY), 2));
+    ctx.arc(prevMouseX, prevMouseY, radius, 0, 2 * Math.PI);
+    fillColor.checked?ctx.fill() : ctx.stroke();
+
+}
+
+
 const startDraw=(e)=>{
     isDrawing=true;
     //passing current mouse pos as prev vals
@@ -41,6 +50,8 @@ const drawing = (e) => {
         ctx.stroke(); // filling line with color
     } else if(selectedTool==="rectangle"){
         drawRectangle(e);
+    } else if(selectedTool==="circle"){
+        drawCircle(e);
     }
     
 }
