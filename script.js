@@ -4,6 +4,8 @@ let fillColor=document.querySelector("#fill-color");
 let size=document.querySelector("#size-slider");
 let colorBtns=document.querySelectorAll(".colors .option");
 let colorPicker=document.querySelector("#color-picker");
+let clearCanvas=document.querySelector(".clear-canvas");
+let saveImage=document.querySelector(".save-img");
 console.log(toolButtons);
 ctx=canvas.getContext("2d");
 
@@ -13,10 +15,17 @@ selectedTool="brush",
 brushSize=5,
 selectedColor="#000";
 
+const setCanvasBackground = () => {
+    //setting whole canvas bg to white so downloaded img background is also white
+    ctx.fillStyle="#fff";
+    ctx.fillRect(0 , 0, canvas.width, canvas.height);
+    ctx.fillStyle = selectedColor;
+}
 
 window.addEventListener("load",()=>{
     canvas.width=canvas.offsetWidth;
     canvas.height=canvas.offsetHeight;
+    setCanvasBackground();
 });
 
 const drawRectangle = (e) => {
@@ -94,6 +103,18 @@ colorBtns.forEach(btn=>{
 colorPicker.addEventListener("change", ()=>{
     colorPicker.parentElement.style.background=colorPicker.value;
     colorPicker.parentElement.click();
+});
+
+clearCanvas.addEventListener("click",()=>{
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    setCanvasBackground();
+})
+
+saveImage.addEventListener("click",()=>{
+    const link=document.createElement("a");
+    link.download=`${Date.now()}.jpg`;
+    link.href=canvas.toDataURL();
+    link.click(); //clicking link to download image
 })
 
 canvas.addEventListener("mousedown", startDraw);
