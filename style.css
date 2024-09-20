@@ -1,96 +1,115 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 }
-body{
+
+body {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     background: #4A98f7;
 }
-.container{
+
+.container {
     display: flex;
     width: 100%;
     gap: 10px;
     padding: 10px;
     max-width: 1050px;
 }
-section{
-    background:white;
+
+section {
+    background: white;
     border-radius: 7px;
 }
-.tools-board{
+
+.tools-board {
     width: 210px;
     padding: 15px 22px 0;
 }
-.tools-board .row{
+
+.tools-board .row {
     margin-bottom: 20px;
 }
-.row .options{
+
+.row .options {
     list-style: none;
     margin: 10px 0 0 5px;
 }
-.row .options .option{
+
+.row .options .option {
     display: flex;
     cursor: pointer;
     align-items: center;
     margin-bottom: 10px;
 }
-.option:is(:hover, .active) img{
-    filter:invert(17%) sepia(90%) saturate(3000%) hue-rotate(900deg) brightness(100%) contrast(100%); 
+
+.option:is(:hover, .active) img {
+    filter: invert(17%) sepia(90%) saturate(3000%) hue-rotate(900deg) brightness(100%) contrast(100%);
 }
-.option :where(span,label){
+
+.option :where(span, label) {
     color: grey;
     padding-left: 10px;
 }
-.option:is(:hover, .active) :where(span,label){
-    color: #4A98f7;
 
+.option:is(:hover, .active) :where(span, label) {
+    color: #4A98f7;
 }
-.option #fill-color{
+
+.option #fill-color {
     height: 14px;
     width: 14px;
 }
-#fill-color:checked ~ label{
+
+#fill-color:checked ~ label {
     color: #4A98f7;
 }
-.option #size-slider{
+
+.option #size-slider {
     width: 100%;
     height: 5px;
     margin-top: 10px;
 }
-.colors .options{
+
+.colors .options {
     display: flex;
     justify-content: space-between;
 }
-.colors .option{
+
+.colors .option {
     height: 20px;
     width: 20px;
-    background: red;
     border-radius: 50%;
     margin-top: 3px;
     position: relative;
 }
-.colors .option:nth-child(1){
-    background-color:white;
+
+.colors .option:nth-child(1) {
+    background-color: white;
     border: 1px solid rgb(102, 102, 102);
 }
-.colors .option:nth-child(2){
+
+.colors .option:nth-child(2) {
     background-color: black;
 }
-.colors .option:nth-child(3){
+
+.colors .option:nth-child(3) {
     background-color: red;
 }
-.colors .option:nth-child(4){
+
+.colors .option:nth-child(4) {
     background-color: lime;
 }
-.colors .option:nth-child(5){
+
+.colors .option:nth-child(5) {
     background-color: pink;
 }
-.colors .option.selected::before{
+
+.colors .option.selected::before {
     position: absolute;
     content: "";
     top: 50%;
@@ -100,16 +119,19 @@ section{
     background: inherit;
     border-radius: inherit;
     border: 2px solid white;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
-.colors .option:first-child.selected::before{
+
+.colors .option:first-child.selected::before {
     border-color: #ccc;
 }
-.option #color-picker{
+
+.option #color-picker {
     opacity: 0;
     cursor: pointer;
 }
-.buttons button{
+
+.buttons button {
     width: 100%;
     color: #fff;
     border: none;
@@ -117,27 +139,100 @@ section{
     padding: 11px 0;
     font-size: 0.9rem;
     margin-bottom: 13px;
-    background:none;
+    background: none;
     border-radius: 5px;
     cursor: pointer;
 }
-.buttons .clear-canvas{
+
+.buttons .clear-canvas {
     color: grey;
     border: 1px solid black;
     transition: all 0.3s ease;
 }
-.clear-canvas:hover{
+
+.clear-canvas:hover {
     color: white;
     background: grey;
 }
-.buttons .save-img{
+
+.buttons .save-img {
     background: #4A98f7;
     border: 1px solid #4A98f7;
 }
-.drawing-board{
+
+.drawing-board {
     flex: 1;
 }
-.drawing-board canvas{
+
+.drawing-board canvas {
     width: 100%;
     height: 100%;
+}
+
+/* Responsive styles */
+@media (max-width: 950px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tools-board {
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .drawing-board {
+        width: 100%;
+    }
+
+    .drawing-board canvas {
+        height: 60vh;
+    }
+}
+
+@media (max-width: 800px) {
+    .tools-board {
+        padding: 10px 15px 0;
+    }
+
+    .row .options {
+        flex-wrap: wrap;
+    }
+
+    .row .options .option {
+        width: calc(50% - 5px);
+    }
+    .colors .options{
+        display: flex;
+        justify-content: space-between;
+    }
+    .colors .options .option{
+        width: 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    .tools-board {
+        padding: 10px 10px 0;
+    }
+
+    .row .options .option {
+        width: 100%;
+    }
+
+    .colors .options {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .colors .option {
+        margin-right: 8px;
+    }
+    .colors .options{
+        display: flex;
+        justify-content: space-between;
+    }
+    .colors .options .option{
+        width: 20px;
+    }
 }
