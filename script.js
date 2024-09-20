@@ -168,3 +168,64 @@ document.body.addEventListener("touchmove", function (e) {
         e.preventDefault();
     }
 }, { passive: false });
+
+
+let saveDrawBtn = document.querySelector(".save");
+let loadDrawSelect = document.querySelector(".load");
+let deleteDrawBtn = document.querySelector(".delete");
+
+
+const saveDrawing = () => {
+    const drawingName = prompt("Enter a name for your drawing:");
+    if (drawingName) {
+        const drawingData = canvas.toDataURL();
+        localStorage.setItem(`drawing_${drawingName}`, drawingData);
+        updateLoadDrawSelect();
+    }
+};
+
+const loadDrawing = () => {
+    const selectedDrawing = loadDrawSelect.value;
+    if (selectedDrawing) {
+        const drawingData = localStorage.getItem(selectedDrawing);
+        const img = new Image();
+        img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = drawingData;
+    }
+};
+
+const deleteDrawing = () => {
+    const selectedDrawing = loadDrawSelect.value;
+    if (selectedDrawing) {
+        localStorage.removeItem(selectedDrawing);
+        updateLoadDrawSelect();
+    }
+};
+
+const updateLoadDrawSelect = () => {
+    loadDrawSelect.innerHTML = '<option value="">Load Drawing</option>';
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('drawing_')) {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = key.replace('drawing_', '');
+            loadDrawSelect.appendChild(option);
+        }
+    }
+};
+
+
+saveDrawBtn.addEventListener("click", saveDrawing);
+loadDrawSelect.addEventListener("change", loadDrawing);
+deleteDrawBtn.addEventListener("click", deleteDrawing);
+
+window.addEventListener("load", () => {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    setCanvasBackground();
+    updateLoadDrawSelect();
+});

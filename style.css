@@ -19,6 +19,7 @@ body {
     gap: 10px;
     padding: 10px;
     max-width: 1050px;
+    height: 95vh;
 }
 
 section {
@@ -168,6 +169,47 @@ section {
     width: 100%;
     height: 100%;
 }
+.crud {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: auto;
+    margin-top: 20px;
+}
+
+.crud button, .crud .load {
+    width: 100%;
+    color: #fff;
+    border: none;
+    outline: none;
+    padding: 11px 0;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.save {
+    background-color: #4CAF50;
+}
+
+.load {
+    background-color: #2196F3;
+    text-align: center;
+}
+
+.delete {
+    background-color: #f44336;
+}
+
+.save:hover, .load:hover {
+    background-color: #45a049;
+}
+
+.delete:hover {
+    background-color: #d32f2f;
+}
 
 /* Responsive styles */
 @media (max-width: 950px) {
@@ -187,6 +229,18 @@ section {
 
     .drawing-board canvas {
         height: 60vh;
+    }
+    .buttons{
+        /* flex-direction: row; */
+        margin-bottom: 0;
+        justify-content: space-around;
+    }
+    .buttons button{
+        width: 45%;
+    }
+    .crud{
+        height: 20%;
+        margin-top: 0;
     }
 }
 
@@ -209,6 +263,7 @@ section {
     .colors .options .option{
         width: 20px;
     }
+    
 }
 
 @media (max-width: 500px) {
