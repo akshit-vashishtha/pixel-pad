@@ -69,10 +69,7 @@
             <hr>
             <div class="crud">
                 <button class="save crudbtn">Save</button>
-                <select class="load">
-                    <option value="">Load Drawing</option>
-                </select>
-                <button class="delete crudbtn">Delete</button>
+                <button id="loadBtn">Load Drawings</button>
             </div>
         </section>
         <section class="drawing-board">
@@ -82,5 +79,15 @@
             <!-- canvas is used to draw graphic elements -->
         </section>
     </div>
+
+
+    <div id="loadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Select a drawing to load:</h2>
+            <div id="drawingList"></div> <!-- Here saved drawings will be displayed -->
+        </div>
+        <button id="closeModal">Close</button>
+    </div>
+
 </body>
 </html>

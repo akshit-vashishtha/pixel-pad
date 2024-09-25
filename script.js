@@ -171,9 +171,12 @@ document.body.addEventListener("touchmove", function (e) {
 
 
 let saveDrawBtn = document.querySelector(".save");
-let loadDrawSelect = document.querySelector(".load");
+// let loadDrawSelect = document.querySelector(".load");
 let deleteDrawBtn = document.querySelector(".delete");
-
+const loadBtn = document.getElementById('loadBtn');
+const loadModal = document.getElementById('loadModal');
+const drawingList = document.getElementById('drawingList');
+const closeModal = document.getElementById('closeModal');
 
 const saveDrawing = () => {
     const drawingName = prompt("Enter a name for your drawing:");
@@ -184,26 +187,80 @@ const saveDrawing = () => {
     }
 };
 
-const loadDrawing = () => {
-    const selectedDrawing = loadDrawSelect.value;
-    if (selectedDrawing) {
-        const drawingData = localStorage.getItem(selectedDrawing);
-        const img = new Image();
-        img.onload = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-        };
-        img.src = drawingData;
+// Function to open the modal and display saved drawings
+const openModal = () => {
+    drawingList.innerHTML = ''; // Clear previous content
+
+    // Loop through localStorage and find all saved drawings
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('drawing_')) {
+            const drawingData = localStorage.getItem(key);
+
+            // Create a container for the drawing and delete button
+            const drawingItem = document.createElement('div');
+            drawingItem.classList.add('drawing-item');
+
+            // Create an image element for the drawing
+            const img = document.createElement('img');
+            img.src = drawingData;
+            img.alt = key;
+            img.title = key;
+
+            // Add click event to load the drawing when clicked
+            img.addEventListener('click', () => {
+                loadDrawing(drawingData);
+                loadModal.style.display = 'none'; // Close modal after selection
+            });
+
+            // Create a delete button for the drawing
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerText = 'Delete';
+            deleteBtn.classList.add('delete-btn');
+
+            // Add click event to delete the drawing
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent triggering the image click
+                deleteDrawing(key); // Call function to delete drawing
+            });
+
+            // Append the image and delete button to the drawing item container
+            drawingItem.appendChild(img);
+            drawingItem.appendChild(deleteBtn);
+
+            // Append the drawing item to the drawingList div
+            drawingList.appendChild(drawingItem);
+        }
+    }
+
+    loadModal.style.display = 'block'; // Show the modal
+};
+
+// Function to load a drawing onto the canvas
+const loadDrawing = (drawingData) => {
+    const img = new Image();
+    img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        ctx.drawImage(img, 0, 0); // Draw the image on the canvas
+    };
+    img.src = drawingData; // Set the image source to the data URL
+};
+
+// Function to delete a drawing from localStorage
+const deleteDrawing = (key) => {
+    if (confirm('Are you sure you want to delete this drawing?')) {
+        localStorage.removeItem(key); // Remove the drawing from localStorage
+        openModal(); // Refresh the modal to reflect the deleted drawing
     }
 };
 
-const deleteDrawing = () => {
-    const selectedDrawing = loadDrawSelect.value;
-    if (selectedDrawing) {
-        localStorage.removeItem(selectedDrawing);
-        updateLoadDrawSelect();
-    }
-};
+// Event listener for the Load button
+loadBtn.addEventListener('click', openModal);
+
+// Event listener to close the modal
+closeModal.addEventListener('click', () => {
+    loadModal.style.display = 'none';
+});
 
 const updateLoadDrawSelect = () => {
     loadDrawSelect.innerHTML = '<option value="">Load Drawing</option>';
