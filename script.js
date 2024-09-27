@@ -26,46 +26,46 @@ window.addEventListener("load", () => {
     setCanvasBackground();
 });
 
-const drawRectangle = (e) => {
+const getMousePos = (canvas, e) => {
     const rect = canvas.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+    };
+}
+
+const drawRectangle = (e) => {
+    const pos = getMousePos(canvas, e);
     if (fillColor.checked) {
-        ctx.fillRect(prevPos.x, prevPos.y, offsetX - prevPos.x, offsetY - prevPos.y);
+        ctx.fillRect(prevPos.x, prevPos.y, pos.x - prevPos.x, pos.y - prevPos.y);
     } else {
-        ctx.strokeRect(prevPos.x, prevPos.y, offsetX - prevPos.x, offsetY - prevPos.y);
+        ctx.strokeRect(prevPos.x, prevPos.y, pos.x - prevPos.x, pos.y - prevPos.y);
     }
 }
 
 const drawCircle = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
+    const pos = getMousePos(canvas, e);
     ctx.beginPath();
-    let radius = Math.sqrt(Math.pow((prevPos.x - offsetX), 2) + Math.pow((prevPos.y - offsetY), 2));
+    let radius = Math.sqrt(Math.pow((prevPos.x - pos.x), 2) + Math.pow((prevPos.y - pos.y), 2));
     ctx.arc(prevPos.x, prevPos.y, radius, 0, 2 * Math.PI);
     fillColor.checked ? ctx.fill() : ctx.stroke();
 }
 
 const drawTriangle = (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
+    const pos = getMousePos(canvas, e);
     ctx.beginPath();
     ctx.moveTo(prevPos.x, prevPos.y);
-    ctx.lineTo(offsetX, offsetY);
-    ctx.lineTo(prevPos.x * 2 - offsetX, offsetY);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.lineTo(prevPos.x * 2 - pos.x, pos.y);
     ctx.closePath();
     fillColor.checked ? ctx.fill() : ctx.stroke();
 }
 
 const startDraw = (e) => {
     isDrawing = true;
-    const rect = canvas.getBoundingClientRect();
-    prevPos = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-    };
+    prevPos = getMousePos(canvas, e);
     ctx.beginPath();
     ctx.lineWidth = brushSize;
     ctx.strokeStyle = selectedColor;
@@ -75,14 +75,12 @@ const startDraw = (e) => {
 
 const drawing = (e) => {
     if (!isDrawing) return;
-    const rect = canvas.getBoundingClientRect();
-    const offsetX = e.clientX - rect.left;
-    const offsetY = e.clientY - rect.top;
+    const pos = getMousePos(canvas, e);
     ctx.putImageData(snapshot, 0, 0);
 
     if (selectedTool === "brush" || selectedTool === "eraser") {
         ctx.strokeStyle = selectedTool === "eraser" ? "#fff" : selectedColor;
-        ctx.lineTo(offsetX, offsetY);
+        ctx.lineTo(pos.x, pos.y);
         ctx.stroke();
     } else if (selectedTool === "rectangle") {
         drawRectangle(e);
@@ -92,6 +90,7 @@ const drawing = (e) => {
         drawTriangle(e);
     }
 }
+
 
 toolButtons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -150,6 +149,7 @@ canvas.addEventListener("touchstart", handleStart);
 canvas.addEventListener("touchmove", handleMove);
 canvas.addEventListener("touchend", handleEnd);
 
+
 size.addEventListener("change", () => { brushSize = size.value });
 
 // Prevent scrolling when touching the canvas
@@ -169,6 +169,10 @@ document.body.addEventListener("touchmove", function (e) {
     }
 }, { passive: false });
 
+
+
+
+// CRUD operations
 
 let saveDrawBtn = document.querySelector(".save");
 // let loadDrawSelect = document.querySelector(".load");
